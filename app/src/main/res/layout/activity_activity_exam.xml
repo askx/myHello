@@ -1,0 +1,41 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="com.suwonsmartapp.hello.activity.ActivityExamActivity">
+
+    <EditText
+        android:id="@+id/dataEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <Button
+        android:id="@+id/moveBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Activity 전환" />
+
+    <Button
+        android:id="@+id/dataMoveBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Data 전달" />
+
+    <Button
+        android:id="@+id/resultBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="결과값 돌려받기" />
+
+    <Button
+        android:id="@+id/dialogBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="다이얼로그" />
+
+</LinearLayout>
