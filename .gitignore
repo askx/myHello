@@ -7,6 +7,7 @@
 
 # Java class files
 *.class
+.idea/
 
 # Generated files
 bin/
@@ -24,3 +25,7 @@ proguard/
 
 # Log Files
 *.log
+gradlew
+gradlew.bat
+gradle
+.navigation
