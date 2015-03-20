@@ -39,30 +39,38 @@ public class SubChallengeActivity extends ActionBarActivity {
 
         ArrayAdapter<String> adapter = new ArrayAdapter<>(getApplicationContext(),
                 android.R.layout.simple_list_item_1, mChallengeList);
-        mListView.setAdapter(adapter);
-        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
                 mListView.setDivider(null);
+
+                mListView.setAdapter(adapter);
+
+                mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
                 switch (position) {
                     case 0:
                         startActivity(new Intent(getApplicationContext(), ImageExamActivity.class));
+                        break;
 
                     case 1:
                         startActivity(new Intent(getApplicationContext(), SMSActivity.class));
+                        break;
 
                     case 2:
                         startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                        break;
 
                     case 3:
                         startActivity(new Intent(getApplicationContext(), Mission05MainActivity.class));
+                        break;
 
                     case 4:
                         startActivity(new Intent(getApplicationContext(), Mission06MainActivity.class));
+                        break;
 
                     default:
+                        break;
                 }
             }
         });

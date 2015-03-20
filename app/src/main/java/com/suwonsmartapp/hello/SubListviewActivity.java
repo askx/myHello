@@ -29,18 +29,21 @@ public class SubListviewActivity extends ActionBarActivity {
         ArrayAdapter<String> adapter = new ArrayAdapter<>(getApplicationContext(),
                 android.R.layout.simple_list_item_1, mListviewList);
 
+        mListView.setDivider(null);
+
         mListView.setAdapter(adapter);
+
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                mListView.setDivider(null);
-
                 switch (position) {
                     case 0:
                         startActivity(new Intent(getApplicationContext(), ListViewActivity.class));
+                        break;
 
                     default:
+                        break;
                 }
             }
         });

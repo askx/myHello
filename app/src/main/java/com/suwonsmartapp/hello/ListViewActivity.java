@@ -34,28 +34,33 @@ public class ListViewActivity extends ActionBarActivity {
         ArrayAdapter<String> adapter = new ArrayAdapter<>(getApplicationContext(),
                 android.R.layout.simple_list_item_1, mFolderList);
 
+        mListView.setDivider(null);
+
         mListView.setAdapter(adapter);
 
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                mListView.setDivider(null);
-
                 switch (position) {
                     case 0:
                         startActivity(new Intent(getApplicationContext(), SubActivityActivity.class));
+                        break;
 
                     case 1:
                         startActivity(new Intent(getApplicationContext(), SubChallengeActivity.class));
+                        break;
 
                     case 2:
                         startActivity(new Intent(getApplicationContext(), SubEventActivity.class));
+                        break;
 
                     case 3:
                         startActivity(new Intent(getApplicationContext(), SubListviewActivity.class));
+                        break;
 
                     default:
+                        break;
                 }
             }
         });

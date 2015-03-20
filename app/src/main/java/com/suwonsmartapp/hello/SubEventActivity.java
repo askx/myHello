@@ -30,18 +30,23 @@ public class SubEventActivity extends ActionBarActivity {
 
         ArrayAdapter<String> adapter = new ArrayAdapter<>(getApplicationContext(),
                 android.R.layout.simple_list_item_1, mEventList);
-        mListView.setAdapter(adapter);
-        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            mListView.setDivider(null);
+
+            mListView.setAdapter(adapter);
+
+            mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-                mListView.setDivider(null);
 
                 switch (position) {
                     case 0:
                         startActivity(new Intent(getApplicationContext(), TouchEventActivity.class));
+                        break;
 
                     default:
+                        break;
                 }
             }
         });
