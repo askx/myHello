@@ -24,7 +24,7 @@ public class SubListviewActivity extends ActionBarActivity {
         mListView = (ListView) findViewById(R.id.IDlistview);
 
         mListviewList = new ArrayList<>();
-        mListviewList.add("ListViewActivity");
+        mListviewList.add("SpinnerActivity");
 
         ArrayAdapter<String> adapter = new ArrayAdapter<>(getApplicationContext(),
                 android.R.layout.simple_list_item_1, mListviewList);
@@ -39,7 +39,7 @@ public class SubListviewActivity extends ActionBarActivity {
 
                 Class c = null;
                 try {
-                    c = Class.forName(BuildConfig.APPLICATION_ID + ".listview" + mListviewList.get(position));
+                    c = Class.forName(BuildConfig.APPLICATION_ID + ".listview." + mListviewList.get(position));
                     startActivity(new Intent(getApplicationContext(), c));
                 } catch (ClassNotFoundException e) {
                 }

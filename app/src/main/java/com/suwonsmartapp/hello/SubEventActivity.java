@@ -42,7 +42,7 @@ public class SubEventActivity extends ActionBarActivity {
 
                 Class c = null;
                 try {
-                    c = Class.forName(BuildConfig.APPLICATION_ID + ".event" + mEventList.get(position));
+                    c = Class.forName(BuildConfig.APPLICATION_ID + ".event." + mEventList.get(position));
                     startActivity(new Intent(getApplicationContext(), c));
                 } catch (ClassNotFoundException e) {
                 }

@@ -68,33 +68,33 @@
         <activity
             android:name=".ListViewActivity"
             android:label="@string/title_activity_list_view">
-            <!--<intent-filter>-->
-            <!--<action android:name="android.intent.action.MAIN" />-->
+            <intent-filter>
+            <action android:name="android.intent.action.MAIN" />
 
-            <!--<category android:name="android.intent.category.LAUNCHER" />-->
-            <!--</intent-filter>-->
+            <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity
             android:name=".SubActivityActivity"
-            android:label=".SubActivityActivity"></activity>
+            android:label=".SubActivityActivity" />
         <activity
             android:name=".SubChallengeActivity"
-            android:label=".SubChallengeActivity"></activity>
+            android:label=".SubChallengeActivity" />
         <activity
             android:name=".SubEventActivity"
-            android:label=".SubEventActivity"></activity>
+            android:label=".SubEventActivity" />
         <activity
             android:name=".SubListviewActivity"
-            android:label=".SubListviewActivity"></activity>
+            android:label=".SubListviewActivity" />
         <activity
             android:name=".listview.SpinnerActivity"
             android:label="@string/title_activity_spinner"
             android:theme="@style/Base.Theme.AppCompat">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+            <!--<intent-filter>-->
+                <!--<action android:name="android.intent.action.MAIN" />-->
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+                <!--<category android:name="android.intent.category.LAUNCHER" />-->
+            <!--</intent-filter>-->
         </activity>
     </application>
 
