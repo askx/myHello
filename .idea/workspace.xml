@@ -17,12 +17,8 @@
     <option name="TOOL_WINDOW_CONFIGURED_FILTER" value="app: com.suwonsmartapp.hello" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a3cd0e10-cd44-4933-9998-a860ec0163aa" name="Default" comment="first commit">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/suwonsmartapp/hello/ListViewActivity.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/suwonsmartapp/hello/ListViewActivity.java" />
+    <list default="true" id="a3cd0e10-cd44-4933-9998-a860ec0163aa" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/suwonsmartapp/hello/SubActivityActivity.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/suwonsmartapp/hello/SubActivityActivity.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/suwonsmartapp/hello/SubChallengeActivity.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/suwonsmartapp/hello/SubChallengeActivity.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/suwonsmartapp/hello/SubEventActivity.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/suwonsmartapp/hello/SubEventActivity.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/suwonsmartapp/hello/SubListviewActivity.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/suwonsmartapp/hello/SubListviewActivity.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="Hello.iws" />
@@ -49,19 +45,25 @@
       <file leaf-file-name="ListViewActivity.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/com/suwonsmartapp/hello/ListViewActivity.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-11.4" vertical-offset="247" max-vertical-offset="1159">
-              <caret line="38" column="0" selection-start-line="38" selection-start-column="0" selection-end-line="38" selection-end-column="0" />
-              <folding />
+            <state vertical-scroll-proportion="0.0" vertical-offset="304" max-vertical-offset="1216">
+              <caret line="46" column="26" selection-start-line="46" selection-start-column="26" selection-end-line="46" selection-end-column="26" />
+              <folding>
+                <element signature="e#1156#2101#0" expanded="true" />
+                <element signature="e#2090#2091#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="SubActivityActivity.java" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="SubActivityActivity.java" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/com/suwonsmartapp/hello/SubActivityActivity.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-10.64" vertical-offset="380" max-vertical-offset="1539">
-              <caret line="51" column="0" selection-start-line="51" selection-start-column="0" selection-end-line="51" selection-end-column="0" />
-              <folding />
+            <state vertical-scroll-proportion="2.4651742" vertical-offset="567" max-vertical-offset="1729">
+              <caret line="99" column="11" selection-start-line="99" selection-start-column="11" selection-end-line="99" selection-end-column="11" />
+              <folding>
+                <element signature="e#1851#3780#0" expanded="true" />
+                <element signature="e#3769#3770#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -89,10 +91,10 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="SubListviewActivity.java" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="SubListviewActivity.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/com/suwonsmartapp/hello/SubListviewActivity.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="1.3302469" vertical-offset="253" max-vertical-offset="874">
+            <state vertical-scroll-proportion="0.0" vertical-offset="424" max-vertical-offset="874">
               <caret line="46" column="0" selection-start-line="46" selection-start-column="0" selection-end-line="46" selection-end-column="0" />
               <folding />
             </state>
@@ -1314,11 +1316,11 @@
         <option value="$PROJECT_DIR$/app/src/main/res/layout/activity_list_view.xml" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/suwonsmartapp/hello/listview/ListViewActivity.java" />
         <option value="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/suwonsmartapp/hello/ListViewActivity.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/suwonsmartapp/hello/SubActivityActivity.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/suwonsmartapp/hello/SubChallengeActivity.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/suwonsmartapp/hello/SubEventActivity.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/suwonsmartapp/hello/SubListviewActivity.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/suwonsmartapp/hello/ListViewActivity.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/suwonsmartapp/hello/SubActivityActivity.java" />
       </list>
     </option>
   </component>
@@ -1700,7 +1702,11 @@
       <created>1426811335922</created>
       <updated>1426811335922</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="first commit">
+      <created>1426813559803</created>
+      <updated>1426813559803</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -1709,7 +1715,7 @@
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.08174905" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32889733" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.18631178" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Build Variants" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -1719,7 +1725,7 @@
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32889733" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.040515654" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Android" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.18060836" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Android" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.18060836" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Gradle Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.25348645" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
@@ -1763,7 +1769,10 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1064">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
+          <folding>
+            <element signature="e#1156#2101#0" expanded="true" />
+            <element signature="e#2090#2091#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -2113,22 +2122,6 @@
         <state />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/suwonsmartapp/hello/ListViewActivity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-11.4" vertical-offset="247" max-vertical-offset="1159">
-          <caret line="38" column="0" selection-start-line="38" selection-start-column="0" selection-end-line="38" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/suwonsmartapp/hello/SubActivityActivity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-10.64" vertical-offset="380" max-vertical-offset="1539">
-          <caret line="51" column="0" selection-start-line="51" selection-start-column="0" selection-end-line="51" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/suwonsmartapp/hello/SubChallengeActivity.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-6.72" vertical-offset="383" max-vertical-offset="1254">
@@ -2150,9 +2143,31 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/suwonsmartapp/hello/SubListviewActivity.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="1.3302469" vertical-offset="253" max-vertical-offset="874">
+        <state vertical-scroll-proportion="0.0" vertical-offset="424" max-vertical-offset="874">
           <caret line="46" column="0" selection-start-line="46" selection-start-column="0" selection-end-line="46" selection-end-column="0" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/suwonsmartapp/hello/ListViewActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="304" max-vertical-offset="1216">
+          <caret line="46" column="26" selection-start-line="46" selection-start-column="26" selection-end-line="46" selection-end-column="26" />
+          <folding>
+            <element signature="e#1156#2101#0" expanded="true" />
+            <element signature="e#2090#2091#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/suwonsmartapp/hello/SubActivityActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="2.4651742" vertical-offset="567" max-vertical-offset="1729">
+          <caret line="99" column="11" selection-start-line="99" selection-start-column="11" selection-end-line="99" selection-end-column="11" />
+          <folding>
+            <element signature="e#1851#3780#0" expanded="true" />
+            <element signature="e#3769#3770#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
