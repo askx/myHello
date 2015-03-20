@@ -36,7 +36,7 @@ public class SpinnerActivity extends ActionBarActivity implements AdapterView.On
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        selectColor.setText(items[position]);
+//        selectColor.setText(items[position]);
     }
 
     @Override
