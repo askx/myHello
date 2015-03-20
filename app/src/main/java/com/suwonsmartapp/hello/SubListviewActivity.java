@@ -37,13 +37,11 @@ public class SubListviewActivity extends ActionBarActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                switch (position) {
-                    case 0:
-                        startActivity(new Intent(getApplicationContext(), ListViewActivity.class));
-                        break;
-
-                    default:
-                        break;
+                Class c = null;
+                try {
+                    c = Class.forName(BuildConfig.APPLICATION_ID + ".listview" + mListviewList.get(position));
+                    startActivity(new Intent(getApplicationContext(), c));
+                } catch (ClassNotFoundException e) {
                 }
             }
         });

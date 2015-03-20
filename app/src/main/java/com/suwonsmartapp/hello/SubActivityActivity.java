@@ -55,47 +55,10 @@ public class SubActivityActivity extends ActionBarActivity {
 
                 Class c = null;
                 try {
-                    c = Class.forName(mActivityList.get(position));
+                    c = Class.forName(BuildConfig.APPLICATION_ID + ".activity." + mActivityList.get(position));
                     startActivity(new Intent(getApplicationContext(), c));
                 } catch (ClassNotFoundException e) {
                 }
-
-//                switch (position) {
-//                    case 0:
-//                        startActivity(new Intent(getApplicationContext(), ActivityExamActivity.class));
-//                        break;
-//
-//                    case 1:
-//                        startActivity(new Intent(getApplicationContext(), EditTextActivity.class));
-//                        break;
-//
-//                    case 2:
-//                        startActivity(new Intent(getApplicationContext(), FirstActivity.class));
-//                        break;
-//
-//                    case 3:
-//                        startActivity(new Intent(getApplicationContext(), FrameLayoutActivity.class));
-//                        break;
-//
-//                    case 4:
-//                        startActivity(new Intent(getApplicationContext(), RelativeLayoutExamActivity.class));
-//                        break;
-//
-//                    case 5:
-//                        startActivity(new Intent(getApplicationContext(), SecondActivity.class));
-//                        break;
-//
-//                    case 6:
-//                        startActivity(new Intent(getApplicationContext(), TableLayoutActivity.class));
-//                        break;
-//
-//                    case 7:
-//                        startActivity(new Intent(getApplicationContext(), TargetActivity.class));
-//                        break;
-//
-//                    default:
-//                        break;
-//                }
             }
         });
     }

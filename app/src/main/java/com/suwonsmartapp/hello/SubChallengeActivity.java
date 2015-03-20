@@ -48,29 +48,11 @@ public class SubChallengeActivity extends ActionBarActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                switch (position) {
-                    case 0:
-                        startActivity(new Intent(getApplicationContext(), ImageExamActivity.class));
-                        break;
-
-                    case 1:
-                        startActivity(new Intent(getApplicationContext(), SMSActivity.class));
-                        break;
-
-                    case 2:
-                        startActivity(new Intent(getApplicationContext(), MainActivity.class));
-                        break;
-
-                    case 3:
-                        startActivity(new Intent(getApplicationContext(), Mission05MainActivity.class));
-                        break;
-
-                    case 4:
-                        startActivity(new Intent(getApplicationContext(), Mission06MainActivity.class));
-                        break;
-
-                    default:
-                        break;
+                Class c = null;
+                try {
+                    c = Class.forName(BuildConfig.APPLICATION_ID + ".challenge." + mChallengeList.get(position));
+                    startActivity(new Intent(getApplicationContext(), c));
+                } catch (ClassNotFoundException e) {
                 }
             }
         });
