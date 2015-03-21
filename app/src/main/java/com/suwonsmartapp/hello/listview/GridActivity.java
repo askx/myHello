@@ -3,9 +3,9 @@ package com.suwonsmartapp.hello.listview;
 import android.graphics.Color;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -14,31 +14,33 @@ import android.widget.TextView;
 
 import com.suwonsmartapp.hello.R;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
+import java.util.GregorianCalendar;
 
 public class GridActivity extends ActionBarActivity implements AdapterView.OnItemClickListener {
 
     private GridView mGridView;
-    private ArrayList<String> list;
+    private ArrayList<String> list;     // calendar data = week + 6 spaces + 31 days
     private Button mLeftButton;
     private Button mRightButton;
     private TextView mTodayText;
 
-    private Calendar today;
+    private Calendar today;     // save today information from android calendar (we need to change it to gregorian calendar)
     private int moveMonth;      // 0 = no change, -1 = left month, +1 = right month
     private int howManyMoved;   // counter for how many left/right button pressed
 
     private int year, month, day, week;
     private int datePerMonth, startWeek;
 
+    private Animation mTranslationAnimation;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_grid);
 
+        // get button ID for attach listener
         mGridView = (GridView) findViewById(R.id.IDgridview);
         mLeftButton = (Button) findViewById(R.id.IDprevmonth);
         mRightButton = (Button) findViewById(R.id.IDnextmonth);
@@ -60,6 +62,7 @@ public class GridActivity extends ActionBarActivity implements AdapterView.OnIte
                 moveMonth = -1;     // left button pressed, go to the previous month
                 howManyMoved--;     // flag for seeing where we are.
                 changeCalender();   // display calendar
+                showAnimationRtoL();
             }
         });
 
@@ -70,19 +73,29 @@ public class GridActivity extends ActionBarActivity implements AdapterView.OnIte
                 moveMonth = 1;      // right button pressed, go to the next month
                 howManyMoved++;     // flag for seeing where we are.
                 changeCalender();   // display calendar
+                showAnimationLtoR();
             }
         });
     }
 
+    // make calendar format as follows:
+    //
+    //      일  월  화  수  목  금  토          7개 요일
+    //                               1          6개 space
+    //       2   3   4   5   6   7   8         31개 날짜
+    //       9  10  11  12  13  14  15        ============
+    //      16  17  18  19  20  21  22         44개 datum
+    //      23  24  25  26  27  28  29
+    //      30  31
     private void initialize() {
         list = new ArrayList<>();
-        list.add("일");      // calendar header
-        list.add("월");
-        list.add("화");
-        list.add("수");
-        list.add("목");
-        list.add("금");
-        list.add("토");
+        list.add("日");      // calendar header
+        list.add("月");
+        list.add("火");
+        list.add("水");
+        list.add("木");
+        list.add("金");
+        list.add("土");
         list.add(" ");      // The very 1st day of the month can be placed on Saturday
         list.add(" ");      // so that we need 6 spaces maximum.
         list.add(" ");
@@ -114,7 +127,7 @@ public class GridActivity extends ActionBarActivity implements AdapterView.OnIte
         }
 
         // refer the following table (@ = 한달의 첫날요일)
-        //   @   1일 2일 3일 4일 5일 6일 7일     |            |            |             |           |            |            |
+        //   @   1일 2일 3일 4일 5일 6일 7일     |            |            |            |            |            |            |
         // 일(1)  1   7   6   5   4   3   2    7 | ******   7 | *******  7 | *******  7 | *******  7 | *******  7 | *******  7 | *******
         // 월(2)  2   1   7   6   5   4   3    6 | ***** *  6 | ******   6 | *******  6 | *******  6 | *******  6 | *******  6 | *******
         // 화(3)  3   2   1   7   6   5   4    5 | **** **  5 | ***** *  5 | ******   5 | *******  5 | *******  5 | *******  5 | *******
@@ -134,8 +147,8 @@ public class GridActivity extends ActionBarActivity implements AdapterView.OnIte
         int remainder = ((day - 1) % 7) + 1;    // make any day to the 1 < day < 7 by getting remainder of 7 days
         startWeek = week - remainder + 1;       // get the first day's week
         if (startWeek <= 0) {
-            startWeek = startWeek + 7;
-        }
+            startWeek = startWeek + 7;          // 0 = 토(7), -1 = 금(8), -2 = 목(5), -3 = 수(4), -4 = 화(3), -5 = 월(2)
+        }                                       // by adding 7 on the result of week - day + 1
 
         startWeek = startWeek + 6;              // skip calendar head (7 weeks) for indexing
 
@@ -151,7 +164,7 @@ public class GridActivity extends ActionBarActivity implements AdapterView.OnIte
         }
 
         // adapter preparation
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_list_item_1, list);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1, list);
         mGridView.setAdapter(adapter);
     }
 
@@ -160,7 +173,7 @@ public class GridActivity extends ActionBarActivity implements AdapterView.OnIte
     // 대신에 달력을 이번달에 처음 표시하는 경우에는 오늘 날짜를 읽어 today를 리셋해 줌.
     private void adjustToday() {
         if (howManyMoved == 0) {
-            today = Calendar.getInstance();     // we moved from prev/next month, thus refresh day again
+            today = GregorianCalendar.getInstance();     // we moved from prev/next month, thus refresh day again
         } else if (day > 28) {
             today.add((Calendar.DATE), -3);     // make 1 < day < 28
         }
@@ -185,6 +198,18 @@ public class GridActivity extends ActionBarActivity implements AdapterView.OnIte
         }
         mRightButton.setTextColor(Color.RED);   // right button
         mRightButton.setText(nextActualMonth + "월");
+    }
+
+    public void showAnimationLtoR() {
+        mTranslationAnimation = AnimationUtils.loadAnimation(getApplicationContext(),
+                R.anim.translationr);
+        mGridView.setAnimation(mTranslationAnimation);
+    }
+
+    public void showAnimationRtoL() {
+        mTranslationAnimation = AnimationUtils.loadAnimation(getApplicationContext(),
+                R.anim.translationl);
+        mGridView.setAnimation(mTranslationAnimation);
     }
 
     @Override
