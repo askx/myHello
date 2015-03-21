@@ -100,7 +100,7 @@
         </activity>
         <activity
             android:name=".listview.GridActivity"
-            android:label="@string/title_activity_grid" >
+            android:label="달력" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

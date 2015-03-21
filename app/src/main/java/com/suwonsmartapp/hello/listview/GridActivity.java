@@ -1,5 +1,6 @@
 package com.suwonsmartapp.hello.listview;
 
+import android.app.DatePickerDialog;
 import android.graphics.Color;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -9,6 +10,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.GridView;
 import android.widget.TextView;
 
@@ -49,11 +51,14 @@ public class GridActivity extends ActionBarActivity implements AdapterView.OnIte
         // for the schedule saving
         mGridView.setOnItemClickListener(this);
 
+        initialize();       // initialize variables
+
         // setting today's calendar
         moveMonth = 0;      // we need to calculate how much month moved to left(-) or right(+)
         howManyMoved = 0;   // flag for seeing where we are.
-        initialize();       // initialize variables
+        today = GregorianCalendar.getInstance();     // we moved from prev/next month, thus refresh day again
         changeCalender();   // display calendar
+        showAnimationUtoD();    // display calendar from top to bottom direction
 
         // backward month
         mLeftButton.setOnClickListener(new View.OnClickListener() {
@@ -62,7 +67,7 @@ public class GridActivity extends ActionBarActivity implements AdapterView.OnIte
                 moveMonth = -1;     // left button pressed, go to the previous month
                 howManyMoved--;     // flag for seeing where we are.
                 changeCalender();   // display calendar
-                showAnimationRtoL();
+                showAnimationLtoR();    // display calendar from left to right direction
             }
         });
 
@@ -73,7 +78,15 @@ public class GridActivity extends ActionBarActivity implements AdapterView.OnIte
                 moveMonth = 1;      // right button pressed, go to the next month
                 howManyMoved++;     // flag for seeing where we are.
                 changeCalender();   // display calendar
-                showAnimationLtoR();
+                showAnimationRtoL();    // display calendar from right to left direction
+            }
+        });
+
+        // change today
+        mTodayText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new DatePickerDialog(GridActivity.this, dateSetListener, year, month, day).show();
             }
         });
     }
@@ -172,9 +185,7 @@ public class GridActivity extends ActionBarActivity implements AdapterView.OnIte
     // 역으로 1월 31일에서 2월로 넘어갔을 경우도 동일하기 때문에 오늘 날짜가 29,30,31일인 경우는 무조건 3일을 보정해 줌.
     // 대신에 달력을 이번달에 처음 표시하는 경우에는 오늘 날짜를 읽어 today를 리셋해 줌.
     private void adjustToday() {
-        if (howManyMoved == 0) {
-            today = GregorianCalendar.getInstance();     // we moved from prev/next month, thus refresh day again
-        } else if (day > 28) {
+        if ((howManyMoved != 0) && (day > 28)) {
             today.add((Calendar.DATE), -3);     // make 1 < day < 28
         }
     }
@@ -182,22 +193,28 @@ public class GridActivity extends ActionBarActivity implements AdapterView.OnIte
     // 달력의 년월 부분 표시
     private void showCurrentMonth() {
         int actualMonth = month + 1;            // nonth = 0 ~ 11 (1월 ~ 12월)
-        mTodayText.setTextColor(Color.BLUE);    // display current year and month
+        mTodayText.setTextColor(Color.RED);    // display current year and month
         mTodayText.setText("   " + year + "년 " + actualMonth + "월   ");
 
         int prevActualMonth = actualMonth - 1;  // get previous month
         if (prevActualMonth == 0) {
             prevActualMonth = 12;
         }
-        mLeftButton.setTextColor(Color.RED);    // left button
+        mLeftButton.setTextColor(Color.BLUE);    // left button
         mLeftButton.setText(prevActualMonth + "월");
 
         int nextActualMonth = actualMonth + 1;  // get next month
         if (nextActualMonth == 13) {
             nextActualMonth = 1;
         }
-        mRightButton.setTextColor(Color.RED);   // right button
+        mRightButton.setTextColor(Color.BLUE);   // right button
         mRightButton.setText(nextActualMonth + "월");
+    }
+
+    public void showAnimationUtoD() {
+        mTranslationAnimation = AnimationUtils.loadAnimation(getApplicationContext(),
+                R.anim.translation);
+        mGridView.setAnimation(mTranslationAnimation);
     }
 
     public void showAnimationLtoR() {
@@ -211,6 +228,20 @@ public class GridActivity extends ActionBarActivity implements AdapterView.OnIte
                 R.anim.translationl);
         mGridView.setAnimation(mTranslationAnimation);
     }
+
+    private DatePickerDialog.OnDateSetListener dateSetListener = new DatePickerDialog.OnDateSetListener() {
+        @Override
+        public void onDateSet(DatePicker view, int yearSelected, int monthOfYear, int dayOfMonth) {
+            today.set(Calendar.YEAR, yearSelected);
+            today.set(Calendar.MONTH, monthOfYear);
+            today.set(Calendar.DATE, dayOfMonth);
+
+            moveMonth = 0;      // we need to calculate how much month moved to left(-) or right(+)
+            howManyMoved = 0;   // flag for seeing where we are.
+            changeCalender();   // display calendar
+            showAnimationUtoD();    // display calendar from top to bottom direction
+        }
+    };
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
