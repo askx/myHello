@@ -252,6 +252,10 @@ public class GridActivity extends ActionBarActivity implements AdapterView.OnIte
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        list.set(position, list.get(position) + "0");
+        if ((position > 6) && (position < datePerMonth + 6 + 1)) {
+            view.setBackgroundColor(Color.YELLOW);
+//            view.setTextColor(Color.BLACK);
+            list.set(position, list.get(position));
+        }
     }
 }
