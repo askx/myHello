@@ -4,6 +4,7 @@ package com.suwonsmartapp.hello.listview;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
 
 import android.app.DatePickerDialog;
 import android.graphics.Color;
@@ -16,7 +17,9 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.GridView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.suwonsmartapp.hello.R;
@@ -29,14 +32,23 @@ public class GridActivity extends ActionBarActivity implements AdapterView.OnIte
     private Button mRightButton;
     private TextView mTodayText;
 
+    private TextView mIDinputschedule;
+
+    private HashMap<Integer, String> myData;
+
     private Calendar today; // save today information from android calendar (we
                             // need to change it to gregorian calendar)
     private int moveMonth; // 0 = no change, -1 = left month, +1 = right month
     private int howManyMoved; // counter for how many left/right button pressed
 
     private int year, month, day, week;
-    private int datePerMonth, startWeek;
+    private int datePerMonth, startWeek, endWeek;
 
+    private int key;
+    private String schedule;
+
+//    private ArrayAdapter<String> adapter;
+    private MyCalendarAdapter adapter;
     private Animation mTranslationAnimation;
 
     @Override
@@ -49,6 +61,10 @@ public class GridActivity extends ActionBarActivity implements AdapterView.OnIte
         mLeftButton = (Button) findViewById(R.id.IDprevmonth);
         mRightButton = (Button) findViewById(R.id.IDnextmonth);
         mTodayText = (TextView) findViewById(R.id.IDthismonth);
+
+        mIDinputschedule = (TextView) findViewById(R.id.IDinputschedule);
+
+        myData = new HashMap<>();
 
         // for the schedule saving
         mGridView.setOnItemClickListener(this);
@@ -116,15 +132,8 @@ public class GridActivity extends ActionBarActivity implements AdapterView.OnIte
         list.add("木");
         list.add("金");
         list.add("土");
-        list.add(" "); // The very 1st day of the month can be placed on
-                       // Saturday
-        list.add(" "); // so that we need 6 spaces maximum.
-        list.add(" ");
-        list.add(" ");
-        list.add(" ");
-        list.add(" ");
 
-        for (int i = 1; i < 32; i++) { // maximum 31 days per a month.
+        for (int i = 1; i < 7 * 6 + 1; i++) { // maximum 31 days per a month.
             list.add(String.valueOf(i)); // prepare spaces
         }
     }
@@ -149,14 +158,14 @@ public class GridActivity extends ActionBarActivity implements AdapterView.OnIte
         }
 
         // refer the following table (@ = 한달의 첫날요일)
-        // @    1일 2일 3일 4일 5일 6일 7일
-        // 일(1) 1   7   6   5   4   3   2
-        // 월(2) 2   1   7   6   5   4   3
-        // 화(3) 3   2   1   7   6   5   4
-        // 수(4) 4   3   2   1   7   6   5
-        // 목(5) 5   4   3   2   1   7   6
-        // 금(6) 6   5   4   3   2   1   7
-        // 토(7) 7   6   5   4   3   2   1
+        // @ 1일 2일 3일 4일 5일 6일 7일
+        // 일(1) 1 7 6 5 4 3 2
+        // 월(2) 2 1 7 6 5 4 3
+        // 화(3) 3 2 1 7 6 5 4
+        // 수(4) 4 3 2 1 7 6 5
+        // 목(5) 5 4 3 2 1 7 6
+        // 금(6) 6 5 4 3 2 1 7
+        // 토(7) 7 6 5 4 3 2 1
 
         int remainder = ((day - 1) % 7) + 1; // make any day to the 1 < day < 7
                                              // by getting remainder of 7 days
@@ -168,20 +177,26 @@ public class GridActivity extends ActionBarActivity implements AdapterView.OnIte
 
         startWeek = startWeek + 6; // skip calendar head (7 weeks) for indexing
 
+        if (startWeek == 7) {
+            startWeek = startWeek + 7;
+        }
+
+        endWeek = datePerMonth + startWeek - 1;
+
         int j = 1;
         for (int i = startWeek; i < datePerMonth + startWeek; i++) {
             list.set(i, String.valueOf(j)); // make calendar
             j++;
         }
 
-        // list data 갯수 = 요일7개 + 공백6개 + 날자31개
-        for (int i = datePerMonth + startWeek; i < (7 + 6 + 31); i++) {
+        // list data 갯수 = 요일7개 + 날짜 6줄
+        for (int i = datePerMonth + startWeek; i < 7 * 7; i++) {
             list.set(i, " "); // delete rest part
         }
 
         // adapter preparation
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(getApplicationContext(),
-                android.R.layout.simple_list_item_1, list);
+//        adapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1, list);
+        adapter = new MyCalendarAdapter(getApplicationContext(), list);
         mGridView.setAdapter(adapter);
     }
 
@@ -200,12 +215,14 @@ public class GridActivity extends ActionBarActivity implements AdapterView.OnIte
         int actualMonth = month + 1; // nonth = 0 ~ 11 (1월 ~ 12월)
         mTodayText.setTextColor(Color.RED); // display current year and month
         mTodayText.setText("   " + year + "년 " + actualMonth + "월   ");
+        mIDinputschedule.setVisibility(View.GONE);
 
         int prevActualMonth = actualMonth - 1; // get previous month
         if (prevActualMonth == 0) {
             prevActualMonth = 12;
         }
         mLeftButton.setTextColor(Color.BLUE); // left button
+        mLeftButton.setBackgroundColor(0xff808080);         // grey
         mLeftButton.setText(prevActualMonth + "월");
 
         int nextActualMonth = actualMonth + 1; // get next month
@@ -213,6 +230,7 @@ public class GridActivity extends ActionBarActivity implements AdapterView.OnIte
             nextActualMonth = 1;
         }
         mRightButton.setTextColor(Color.BLUE); // right button
+        mRightButton.setBackgroundColor(0xff808080);         // grey
         mRightButton.setText(nextActualMonth + "월");
     }
 
@@ -252,10 +270,35 @@ public class GridActivity extends ActionBarActivity implements AdapterView.OnIte
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        if ((position > 6) && (position < datePerMonth + 6 + 1)) {
-            view.setBackgroundColor(Color.YELLOW);
-//            view.setTextColor(Color.BLACK);
-            list.set(position, list.get(position));
+        adapter.setSelectedPosition(position);                  // notify position
+        adapter.notifyDataSetChanged(); // tell the data set changed by clicking
+
+        if ((position >= startWeek) && (position <= endWeek)) {
+
+            CustomDialog dialog = new CustomDialog(this);
+            dialog.show();
+
+            String emsiHour = dialog.getSavedHour();
+            String emsiMinute = dialog.getSavedMinute();
+            ArrayList emsiText = dialog.getSavedText();
+
+            String currentSelection = list.get(position);
+//            list.set(position, currentSelection + "*");
+            today.set(Calendar.DATE, Integer.valueOf(currentSelection));
+            day = today.get(Calendar.DATE);
+
+            // generate a key using year, month, day
+            key = year * 10000 + month * 100 + day;
+
+            String imsi = myData.get(key); // get data on key position
+            if ((imsi == null) || ("".equals(imsi))) {
+                mIDinputschedule.setVisibility(View.GONE);
+                mIDinputschedule.setText("");    // clear input field
+                myData.put(key, emsiHour + ":" + emsiMinute + " " + emsiText);
+            } else {
+                mIDinputschedule.setVisibility(View.VISIBLE);
+                mIDinputschedule.setText(imsi);  // get saved schedule
+            }
         }
     }
 }

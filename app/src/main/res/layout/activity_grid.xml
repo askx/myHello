@@ -36,7 +36,18 @@
     <GridView
         android:id="@+id/IDgridview"
         android:numColumns="7"
+        android:background="@android:color/darker_gray"
+        android:horizontalSpacing="1dp"
+        android:stretchMode="columnWidth"
+        android:verticalSpacing="1dp"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:id="@+id/IDinputschedule"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+    </TextView>
 
 </LinearLayout>

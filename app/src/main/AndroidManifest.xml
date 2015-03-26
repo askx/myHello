@@ -68,11 +68,13 @@
         <activity
             android:name=".ListViewActivity"
             android:label="@string/title_activity_list_view" >
-            <!--<intent-filter>-->
-                <!--<action android:name="android.intent.action.MAIN" />-->
 
-                <!--<category android:name="android.intent.category.LAUNCHER" />-->
-            <!--</intent-filter>-->
+            <!-- <intent-filter> -->
+            <!-- <action android:name="android.intent.action.MAIN" /> -->
+
+
+            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
+            <!-- </intent-filter> -->
         </activity>
         <activity
             android:name=".SubActivityActivity"
@@ -101,6 +103,15 @@
         <activity
             android:name=".listview.GridActivity"
             android:label="달력" >
+            <!--<intent-filter>-->
+                <!--<action android:name="android.intent.action.MAIN" />-->
+
+                <!--<category android:name="android.intent.category.LAUNCHER" />-->
+            <!--</intent-filter>-->
+        </activity>
+        <activity
+            android:name=".listview.StopWatchActivity"
+            android:label="@string/title_activity_stop_watch" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
