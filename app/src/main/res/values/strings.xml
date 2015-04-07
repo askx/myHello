@@ -28,4 +28,22 @@
     <string name="title_activity_spinner">SpinnerActivity</string>
     <string name="title_activity_grid">GridActivity</string>
     <string name="title_activity_stop_watch">StopWatchActivity</string>
+    <string name="title_activity_map">MapActivity</string>
+    <string name="title_activity_mapalbum">Main2Activity</string>
+
+    <string name="title_section1">Section 1</string>
+    <string name="title_section2">Section 2</string>
+    <string name="title_section3">Section 3</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_example">Example action</string>
+    <string name="title_activity_google_mapki_util">GoogleMapkiUtil</string>
+    <string name="title_activity_main2">Main2Activity</string>
+
+    <string name="hello">Hello World, GoogleMapkiexampleActivity!</string>
+    <string name="longTouchPlease">길게 터치한 후 기다려 주세요.</string>
+    <string name="map_not_ready">Map is not ready yet</string>
+    <string name="searchName">검색명</string>
 </resources>

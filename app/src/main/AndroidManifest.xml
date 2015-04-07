@@ -5,6 +5,18 @@
     <!-- 도전.06 웹브라우저 화면 구성 -->
     <uses-permission android:name="android.permission.INTERNET" />
 
+    <!-- 구글 맵을 위해 추가 -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <!--
+         The following two permissions are not required to use
+         Google Maps Android API v2, but are recommended.
+    -->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+
+    <uses-library android:name="com.google.android.maps" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -57,24 +69,10 @@
         <activity
             android:name=".challenge.challenge06.Mission06MainActivity"
             android:label="@string/title_activity_mission06_main" >
-
-            <!-- <intent-filter> -->
-            <!-- <action android:name="android.intent.action.MAIN" /> -->
-
-
-            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
-            <!-- </intent-filter> -->
         </activity>
         <activity
             android:name=".ListViewActivity"
             android:label="@string/title_activity_list_view" >
-
-            <!-- <intent-filter> -->
-            <!-- <action android:name="android.intent.action.MAIN" /> -->
-
-
-            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
-            <!-- </intent-filter> -->
         </activity>
         <activity
             android:name=".SubActivityActivity"
@@ -92,32 +90,44 @@
             android:name=".listview.SpinnerActivity"
             android:label="@string/title_activity_spinner"
             android:theme="@style/Base.Theme.AppCompat" >
-
-            <!-- <intent-filter> -->
-            <!-- <action android:name="android.intent.action.MAIN" /> -->
-
-
-            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
-            <!-- </intent-filter> -->
         </activity>
         <activity
             android:name=".listview.GridActivity"
             android:label="달력" >
-            <!--<intent-filter>-->
-                <!--<action android:name="android.intent.action.MAIN" />-->
-
-                <!--<category android:name="android.intent.category.LAUNCHER" />-->
-            <!--</intent-filter>-->
         </activity>
         <activity
             android:name=".listview.StopWatchActivity"
             android:label="@string/title_activity_stop_watch" >
+        </activity>
+        <activity
+            android:name=".map.MapActivity"
+            android:label="@string/title_activity_map" >
+        </activity>
+
+
+        <!-- Google Map 사용을 위해 -->
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyAl0NO9ThZ7wOk_pJp-fLH39_xFUrasuA4" />
+
+        <activity
+            android:name=".mapalbum.GoogleMapkiUtil"
+            android:label="@string/title_activity_google_mapki_util" >
+        </activity>
+
+        <activity
+            android:name=".mapalbum.Main2Activity"
+            android:label="@string/title_activity_mapalbum" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+
     </application>
 
 </manifest>
