@@ -3,6 +3,8 @@ package com.suwonsmartapp.hello.mapalbum;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.text.TextUtils;
+import android.util.Log;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpVersion;
@@ -17,12 +19,11 @@ import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.params.CoreProtocolPNames;
 import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
+import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.net.URI;
 import java.net.URLEncoder;
 import java.util.ArrayList;
@@ -130,101 +131,112 @@ public class GoogleMapkiUtil {
         @Override
         public String handleResponse(HttpResponse response)
                 throws ClientProtocolException, IOException {
-            StringBuilder sb = new StringBuilder();
             try {
-                // InputStreamReader isr = new InputStreamReader(response.getEntity().getContent(), "EUC-KR");
-                InputStreamReader isr = new InputStreamReader(response.getEntity().getContent(), "UTF-8");
-                BufferedReader br = new BufferedReader(isr);
-                for (;;) {
-                    String line = br.readLine();
-                    if (line == null)
-                        break;
-                    sb.append(line + '\n');
-                }
-                br.close();
+                String responseString = EntityUtils.toString(response.getEntity(), "UTF-8");
 
-                // String jsonString = sb.toString().substring(9);
-                String jsonString = sb.toString();
-                JSONObject jj = new JSONObject(jsonString);
-                String a = jj.getString("results");
+                String formatted_address = "";
+                String lat = "";
+                String lng = "";
+                JSONObject rootObject = new JSONObject(responseString);
+                JSONArray eventArray = rootObject.getJSONArray("results");
+                for (int i = 0; i < eventArray.length(); i++) {
+                    JSONObject jsonObject = eventArray.getJSONObject(i);
 
-                int lastAddrOf = a.lastIndexOf("formatted_address");
-                int startAddressIndex = lastAddrOf + 20;
-                int endAddressIndex = lastAddrOf;
-                String address = "";
-                String compareChar = "\"";
-                for (int i = startAddressIndex; i < a.length(); i++) {
-                    if (compareChar.equals(a.charAt(i))) {
+                    // 주소
+                    formatted_address = jsonObject.getString("formatted_address");
+
+                    if (!TextUtils.isEmpty(formatted_address)) {
                         break;
-                    } else {
-                        address = address + a.charAt(i);
                     }
                 }
 
-                int lastPosOf = a.lastIndexOf("location\"");
-                int startPosIndex = lastPosOf + 17;
-                int lastPosIndex = 0;
-                String latitudePos = "";
-                String longitudePos = "";
-                compareChar = ",";
-                for (int i = startPosIndex; i < a.length(); i++) {
-                    if (compareChar.equals(a.charAt(i))) {
-                        break;
-                    } else {
-                        latitudePos = latitudePos + a.charAt(i);
-                        lastPosIndex = i;
-                    }
-                }
+                // 위도, 경고
+                lat = eventArray.getJSONObject(0).getJSONObject("geometry").getJSONObject("location").getString("lat");
+                lng = eventArray.getJSONObject(0).getJSONObject("geometry").getJSONObject("location").getString("lng");
 
-                lastPosIndex = lastPosIndex + 10;
-                compareChar = "\n";
-                for (int i = lastPosIndex; i < a.length(); i++) {
-                    if (compareChar.equals(a.charAt(i))) {
-                        break;
-                    } else {
-                        longitudePos = longitudePos + a.charAt(i);
-                    }
-                }
+                // 로그 확인
+                Log.d("Address", formatted_address);
+                Log.d("Lat", lat);
+                Log.d("Lng", lng);
 
 
+//                int lastAddrOf = jsonResult.lastIndexOf("formatted_address");
+//                int startAddressIndex = lastAddrOf + 20;
+//                int endAddressIndex = lastAddrOf;
+//                String address = "";
+//                String compareChar = "\"";
+//                for (int i = startAddressIndex; i < jsonResult.length(); i++) {
+//                    if (compareChar.equals(jsonResult.charAt(i))) {
+//                        break;
+//                    } else {
+//                        address = address + jsonResult.charAt(i);
+//                    }
+//                }
+//
+//                int lastPosOf = jsonResult.lastIndexOf("location\"");
+//                int startPosIndex = lastPosOf + 17;
+//                int lastPosIndex = 0;
+//                String latitudePos = "";
+//                String longitudePos = "";
+//                compareChar = ",";
+//                for (int i = startPosIndex; i < jsonResult.length(); i++) {
+//                    if (compareChar.equals(jsonResult.charAt(i))) {
+//                        break;
+//                    } else {
+//                        latitudePos = latitudePos + jsonResult.charAt(i);
+//                        lastPosIndex = i;
+//                    }
+//                }
+//
+//                lastPosIndex = lastPosIndex + 10;
+//                compareChar = "\n";
+//                for (int i = lastPosIndex; i < jsonResult.length(); i++) {
+//                    if (compareChar.equals(jsonResult.charAt(i))) {
+//                        break;
+//                    } else {
+//                        longitudePos = longitudePos + jsonResult.charAt(i);
+//                    }
+//                }
 
-                JSONObject geometry = jj.getJSONObject("results");
-                JSONObject addr = geometry.getJSONObject("address_components");
-                JSONArray markers = addr.getJSONArray("formatted_address");
 
-                // JSONObject overlays = jj.getJSONObject("overlays");
-                // JSONArray markers = overlays.getJSONArray("markers");
-                if (markers != null) {
-                    ArrayList<String> searchList = new ArrayList<String>();
-                    String lat, lon;
-                    String addresses;
-                    for (int i = 0; i < markers.length(); i++) {
-                        addresses = markers.getJSONObject(i).getString("laddr");
-                        lat = markers.getJSONObject(i).getJSONObject("latlng")
-                                .getString("lat");
-                        lon = markers.getJSONObject(i).getJSONObject("latlng")
-                                .getString("lng");
-                        searchList.add(addresses);
-                        searchList.add(lat);
-                        searchList.add(lon);
-                    }
 
-                    Message message = resultHandler.obtainMessage();
-                    Bundle bundle = new Bundle();
-                    bundle.putString(RESULT, SUCCESS_RESULT);
-                    bundle.putStringArrayList("searchList", searchList);
-                    message.setData(bundle);
-                    resultHandler.sendMessage(message);
-                } else {
-                    Message message = resultHandler.obtainMessage();
-                    Bundle bundle = new Bundle();
-                    bundle.putString(RESULT, FAIL_MAP_RESULT);
-                    message.setData(bundle);
-                    resultHandler.sendMessage(message);
-
-                    stringData = "JSon >> \n" + sb.toString();
-                    return stringData;
-                }
+//                JSONObject geometry = eventArray.getJSONObject("results");
+//                JSONObject addr = geometry.getJSONObject("address_components");
+//                JSONArray markers = addr.getJSONArray("formatted_address");
+//
+//                // JSONObject overlays = jj.getJSONObject("overlays");
+//                // JSONArray markers = overlays.getJSONArray("markers");
+//                if (markers != null) {
+//                    ArrayList<String> searchList = new ArrayList<String>();
+//                    String lat, lon;
+//                    String addresses;
+//                    for (int i = 0; i < markers.length(); i++) {
+//                        addresses = markers.getJSONObject(i).getString("laddr");
+//                        lat = markers.getJSONObject(i).getJSONObject("latlng")
+//                                .getString("lat");
+//                        lon = markers.getJSONObject(i).getJSONObject("latlng")
+//                                .getString("lng");
+//                        searchList.add(addresses);
+//                        searchList.add(lat);
+//                        searchList.add(lon);
+//                    }
+//
+//                    Message message = resultHandler.obtainMessage();
+//                    Bundle bundle = new Bundle();
+//                    bundle.putString(RESULT, SUCCESS_RESULT);
+//                    bundle.putStringArrayList("searchList", searchList);
+//                    message.setData(bundle);
+//                    resultHandler.sendMessage(message);
+//                } else {
+//                    Message message = resultHandler.obtainMessage();
+//                    Bundle bundle = new Bundle();
+//                    bundle.putString(RESULT, FAIL_MAP_RESULT);
+//                    message.setData(bundle);
+//                    resultHandler.sendMessage(message);
+//
+//                    stringData = "JSon >> \n" + sb.toString();
+//                    return stringData;
+//                }
 
             } catch (Exception e) {
                 Message message = resultHandler.obtainMessage();
