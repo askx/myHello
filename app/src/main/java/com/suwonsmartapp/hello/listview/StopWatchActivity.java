@@ -3,6 +3,7 @@ package com.suwonsmartapp.hello.listview;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.os.SystemClock;
 import android.support.v7.app.ActionBarActivity;
 import android.view.View;
 import android.widget.Button;
@@ -18,6 +19,8 @@ public class StopWatchActivity extends ActionBarActivity implements View.OnClick
 
     private boolean stopFlag = true;       // true if stop, false if run
     private int progress = 0;
+    private long initialTime;
+    private long elapsedTime;
 
     private Handler mTimeHandler = new Handler() {
         public void handleMessage(Message msg) {
@@ -44,15 +47,16 @@ public class StopWatchActivity extends ActionBarActivity implements View.OnClick
         switch (v.getId()) {
             case R.id.clockStart:
                 stopFlag = false;       // true if stop, false if run
+                initialTime = SystemClock.elapsedRealtime();
+
                 Thread thread = new Thread(new Runnable() {
                     @Override
                     public void run() {
                         while (!stopFlag) {
-                            progress += 1;
-                            // UI 업데이트
-                            mTimeHandler.sendEmptyMessage(progress);
+                            elapsedTime = SystemClock.elapsedRealtime() - initialTime;
+                            mTimeHandler.sendEmptyMessage(0);
                             try {
-                                Thread.sleep(1);
+                                Thread.sleep(100);
                             } catch (InterruptedException e) {
                                 e.printStackTrace();
                             }
@@ -70,7 +74,7 @@ public class StopWatchActivity extends ActionBarActivity implements View.OnClick
 
     public String getTimeFormat() {
         Calendar spendCalendar = Calendar.getInstance();
-        spendCalendar.setTimeInMillis(progress);
+        spendCalendar.setTimeInMillis(elapsedTime);
 
         int minute = spendCalendar.get(Calendar.MINUTE);
         int second = spendCalendar.get(Calendar.SECOND);
@@ -93,6 +97,4 @@ public class StopWatchActivity extends ActionBarActivity implements View.OnClick
         }
         return str_minute + ":" + str_second + ":" + str_mils;
     }
-
-
 }
