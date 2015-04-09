@@ -44,8 +44,8 @@ public class MapActivity extends FragmentActivity {
     private double initialLatitude = 37.0d + 51.0d/60 + 71.0d/(60*60) + 80.0d/(60*60*60);
     private double initialLongitude = 127.0d + 04.0d/60 + 12.0d/(60*60) + 68.0d/(60*60*60);
     public static LatLng DEFAULT_GP = new LatLng(37.517180, 127.041268);
-    private double minLatitude =  +81;      // 위도 최대값
-    private double maxLatitude =  -81;      // 위도 최소값
+    private double minLatitude =  +91;      // 위도 최대값
+    private double maxLatitude =  -91;      // 위도 최소값
     private double minLongitude = +181;     // 경도 최대값
     private double maxLongitude = -181;     // 경도 최소값
     private double latitude = 0;        // 위도

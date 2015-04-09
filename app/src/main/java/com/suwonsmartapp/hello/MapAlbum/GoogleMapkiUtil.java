@@ -1,8 +1,11 @@
 package com.suwonsmartapp.hello.mapalbum;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.text.TextUtils;
+import android.util.Log;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpVersion;
@@ -17,18 +20,24 @@ import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.params.CoreProtocolPNames;
 import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
+import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
 public class GoogleMapkiUtil {
+
+    private String address = "";
+    private String latitudePos = "";
+    private String longitudePos = "";
 
     final static public String RESULT = "result";
     final static public String FAIL_MAP_RESULT = "fail_map_result";
@@ -38,6 +47,7 @@ public class GoogleMapkiUtil {
     final static public String TAG_CLIENT = "client";
     final static public String TAG_SERVER = "server";
     public String stringData;
+    public String searchingAddress;
 
     private SearchThread searchThread;
     private Handler resultHandler;
@@ -46,42 +56,59 @@ public class GoogleMapkiUtil {
     public GoogleMapkiUtil() {
     }
 
+    public String getAddress() {
+        return address;                 // return address
+    }
+
+    // 광범위한 주소를 통해 그 동네를 표시할 경우
     public void requestMapSearch(Handler _resultHandler, String searchingName, String nearAddress) {
         resultHandler = _resultHandler;
 
         List<BasicNameValuePair> qparams = new ArrayList<BasicNameValuePair>();
-        qparams.add(new BasicNameValuePair("address", searchingName)); // address=수원시+장안구
-        qparams.add(new BasicNameValuePair("sensor", "true_or_false"));// sensor=true_or_false
-//        qparams.add(new BasicNameValuePair("output", "json"));      // output=json
-//        qparams.add(new BasicNameValuePair("mrt", "yp"));           // mrt=yp
-//        qparams.add(new BasicNameValuePair("hl", "ko"));            // hl=ko
-//        qparams.add(new BasicNameValuePair("radius", "18.641"));    //radius=18.641
-//
-//        // miles = kilometers / 1.60934
-//        qparams.add(new BasicNameValuePair("num", "5"));            // num=5
-//        qparams.add(new BasicNameValuePair("near", nearAddress));   // near=현재나의위치
+        try {
+            searchingAddress = URLEncoder.encode(searchingName, "UTF-8");   // convert address to UTF-8
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        qparams.add(new BasicNameValuePair("address", searchingAddress));  // address=수원시+장안구
+        qparams.add(new BasicNameValuePair("sensor", "true"));          // sensor=true
+        qparams.add(new BasicNameValuePair("language", "ko"));          // language=ko
+
         searchThread = new SearchThread(qparams.toArray(new BasicNameValuePair[qparams.size()]));
-        searchThread.start();           // 주소 서치
+        searchThread.start();                                           // search address
+    }
+
+    // 위도, 경도를 통해 주소를 얻을 경우
+    public void requestPointSearch(Handler _resultHandler, String _latitude, String _longitude) {
+        resultHandler = _resultHandler;
+
+        List<BasicNameValuePair> qparams = new ArrayList<BasicNameValuePair>();
+        qparams.add(new BasicNameValuePair("latlng", _latitude + "," + _longitude));  // address
+        qparams.add(new BasicNameValuePair("sensor", "true"));          // sensor=true
+        qparams.add(new BasicNameValuePair("language", "ko"));          // language=ko
+
+        searchThread = new SearchThread(qparams.toArray(new BasicNameValuePair[qparams.size()]));
+        searchThread.start();                                           // search address
     }
 
     private class SearchThread extends Thread {
-        private String parameters;
+        private String parameters;  // http 검색할 때 ? 다음에 들어갈 검색 구문 옵션 편집 변수
 
         public SearchThread(NameValuePair[] _nameValues) {
             parameters = encodeParams(_nameValues);
         }
 
         public void run() {
-            httpclient = new DefaultHttpClient();   // maps.google.co.kr 사이트에 주소 검색 의뢰
+            httpclient = new DefaultHttpClient();   // maps.googleapis.com 사이트에 주소 검색 의뢰
+
             try {
                 HttpGet get = new HttpGet();
 
-                // http://maps.google.com/maps/api/geocode/json?latlng=37.572826,126.976853&sensor=false&language='ko'
-                //http://maps.googleapis.com/maps/api/geocode/json?address=주소&sensor=true_or_false
-                // get.setURI(new URI("http://maps.google.co.kr?" + parameters));
-                parameters = URLEncoder.encode("수원시+장안구", "UTF-8");
-                // get.setURI(new URI("http://maps.googleapis.com/maps/api/geocode/json?sensor=true&address=" + parameters));
-                get.setURI(new URI("http://maps.googleapis.com/maps/api/geocode/json?sensor=true&language=ko&address=" + parameters));
+                // google map v2.0 이후에는 googleapis를 호출해야 함. 현재는 v3.0 사용중.
+                // parameters에 들어가는 값은 두 가지 경우가 있음.
+                // case 1) 탐색 버튼을 누르고 주소를 입력하면 주소값이 parameters에 들어감.
+                // case 2) 화면에서 롱클릭을 하면 위도와 경도값이 parameters에 들어감.
+                get.setURI(new URI("http://maps.googleapis.com/maps/api/geocode/json?" + parameters));
                 HttpParams params = httpclient.getParams();
                 params.setParameter(CoreProtocolPNames.PROTOCOL_VERSION, HttpVersion.HTTP_1_1);
                 HttpConnectionParams.setConnectionTimeout(params, 10000);
@@ -109,6 +136,7 @@ public class GoogleMapkiUtil {
         }
     }
 
+    // A,B 로 호출하면 A=B& 를 parameters에 넣어줌.
     private String encodeParams(NameValuePair[] parameters) {
         StringBuilder sb = new StringBuilder();
 
@@ -132,82 +160,26 @@ public class GoogleMapkiUtil {
                 throws ClientProtocolException, IOException {
             StringBuilder sb = new StringBuilder();
             try {
-                // InputStreamReader isr = new InputStreamReader(response.getEntity().getContent(), "EUC-KR");
-                InputStreamReader isr = new InputStreamReader(response.getEntity().getContent(), "UTF-8");
-                BufferedReader br = new BufferedReader(isr);
-                for (;;) {
-                    String line = br.readLine();
-                    if (line == null)
-                        break;
-                    sb.append(line + '\n');
-                }
-                br.close();
+                String responseString = EntityUtils.toString(response.getEntity(), "UTF-8");
 
-                // String jsonString = sb.toString().substring(9);
-                String jsonString = sb.toString();
-                JSONObject jj = new JSONObject(jsonString);
-                String a = jj.getString("results");
+                // 주소를 넣어 검색하던지 위도/경도를 넣어 검색해도 동일한 포맷의 JSON 값이 리턴됨.
+                // 어느 경우에나 주소와 위도/경도를 가져와 저장함.
+                JSONObject rootObject = new JSONObject(responseString);
+                JSONArray eventArray = rootObject.getJSONArray("results");
 
-                int lastAddrOf = a.lastIndexOf("formatted_address");
-                int startAddressIndex = lastAddrOf + 20;
-                int endAddressIndex = lastAddrOf;
-                String address = "";
-                String compareChar = "\"";
-                for (int i = startAddressIndex; i < a.length(); i++) {
-                    if (compareChar.equals(a.charAt(i))) {
-                        break;
-                    } else {
-                        address = address + a.charAt(i);
-                    }
-                }
+                // 주소
+                address = eventArray.getJSONObject(0).getString("formatted_address");
+                // 주소값에 대한민국 경기도 등도 포함되나 외국 검색을 위해 나라명도 필요함.
 
-                int lastPosOf = a.lastIndexOf("location\"");
-                int startPosIndex = lastPosOf + 17;
-                int lastPosIndex = 0;
-                String latitudePos = "";
-                String longitudePos = "";
-                compareChar = ",";
-                for (int i = startPosIndex; i < a.length(); i++) {
-                    if (compareChar.equals(a.charAt(i))) {
-                        break;
-                    } else {
-                        latitudePos = latitudePos + a.charAt(i);
-                        lastPosIndex = i;
-                    }
-                }
+                // 위도, 경도
+                latitudePos = eventArray.getJSONObject(0).getJSONObject("geometry").getJSONObject("location").getString("lat");
+                longitudePos = eventArray.getJSONObject(0).getJSONObject("geometry").getJSONObject("location").getString("lng");
 
-                lastPosIndex = lastPosIndex + 10;
-                compareChar = "\n";
-                for (int i = lastPosIndex; i < a.length(); i++) {
-                    if (compareChar.equals(a.charAt(i))) {
-                        break;
-                    } else {
-                        longitudePos = longitudePos + a.charAt(i);
-                    }
-                }
-
-
-
-                JSONObject geometry = jj.getJSONObject("results");
-                JSONObject addr = geometry.getJSONObject("address_components");
-                JSONArray markers = addr.getJSONArray("formatted_address");
-
-                // JSONObject overlays = jj.getJSONObject("overlays");
-                // JSONArray markers = overlays.getJSONArray("markers");
-                if (markers != null) {
+                if (address != null) {
                     ArrayList<String> searchList = new ArrayList<String>();
-                    String lat, lon;
-                    String addresses;
-                    for (int i = 0; i < markers.length(); i++) {
-                        addresses = markers.getJSONObject(i).getString("laddr");
-                        lat = markers.getJSONObject(i).getJSONObject("latlng")
-                                .getString("lat");
-                        lon = markers.getJSONObject(i).getJSONObject("latlng")
-                                .getString("lng");
-                        searchList.add(addresses);
-                        searchList.add(lat);
-                        searchList.add(lon);
-                    }
+                    searchList.add(address);
+                    searchList.add(latitudePos);
+                    searchList.add(longitudePos);
 
                     Message message = resultHandler.obtainMessage();
                     Bundle bundle = new Bundle();
