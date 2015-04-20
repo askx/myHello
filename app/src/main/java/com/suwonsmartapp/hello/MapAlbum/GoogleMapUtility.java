@@ -33,7 +33,7 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GoogleMapkiUtil {
+public class GoogleMapUtility {
 
     private String address = "";
     private String latitudePos = "";
@@ -53,7 +53,7 @@ public class GoogleMapkiUtil {
     private Handler resultHandler;
     private HttpClient httpclient;
 
-    public GoogleMapkiUtil() {
+    public GoogleMapUtility() {
     }
 
     public String getAddress() {

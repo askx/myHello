@@ -17,7 +17,6 @@ import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.suwonsmartapp.hello.R;
-import com.suwonsmartapp.hello.activity.TargetActivity;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -31,8 +30,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.FragmentActivity;
-import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
@@ -41,7 +38,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class Main2Activity extends FragmentActivity {
+public class MapAlbumActivity extends FragmentActivity {
 
     private boolean flagFinish = false;          // APP을 종료할지 결정하는 플래그(true=다른 APP이 부른 경우)
     private boolean semaphoreLongTouch = false; // 롱터치가 발생했는지를 알리는 플래그
@@ -49,26 +46,21 @@ public class Main2Activity extends FragmentActivity {
 
     public static LatLng DEFAULT_GP = new LatLng(37.566500, 126.978000);
 
-    // Minimum & maximum latitude so we can span it
-    // The latitude is clamped between -90 degrees and +90 degrees inclusive
-    // thus we ensure that we go beyond that number
-    private double minLatitude =  +91;
-    private double maxLatitude =  -91;
-
-    // Minimum & maximum longitude so we can span it
-    // The longitude is clamped between -180 degrees and +180 degrees inclusive
-    // thus we ensure that we go beyond that number
-    private double minLongitude = +181;
-    private double maxLongitude = -181;
+    // 위도와 경도의 최대/최소값
+    // 위도의 최소/최대는 -90/90, 경도의 최소/최대는 -180/180
+    private double minLatitude =  +90;
+    private double maxLatitude =  -90;
+    private double minLongitude = +180;
+    private double maxLongitude = -180;
 
     protected GoogleMap mMap;
     private StringBuffer strAddr;
     private ProgressDialog progressDialog;
     private String errorString = "";
-    private ImageButton searchBt;
-    private GoogleMapkiUtil httpUtil;
+    private ImageButton searchBt;       // 돋보기 탐색 버튼
+    private GoogleMapUtility httpUtil;   // mapapis를 통해 query를 하는 모듈
     private AlertDialog errorDialog;
-    private Handler handler;
+    private Handler handler;            // 메시지 핸들러
 
     private String coordinates[] = { "37.517180", "127.041268" };   // 위도와 경도를 초기화.
     private double latitude = 0;        // 위도
@@ -101,7 +93,7 @@ public class Main2Activity extends FragmentActivity {
         searchBt.setOnClickListener(onNameSearch);
 
         // httpUtil 생성자
-        httpUtil = new GoogleMapkiUtil();
+        httpUtil = new GoogleMapUtility();
 
         errorDialog = new AlertDialog.Builder(this).setTitle("Searching...")
                 .setMessage(errorString).setPositiveButton("Close", null)
@@ -122,8 +114,8 @@ public class Main2Activity extends FragmentActivity {
                     getMapPosition(latLng);     // get current position
 
                     // httpUtil
-                    httpUtil = new GoogleMapkiUtil();
-                    httpUtil.requestPointSearch(new ResultHandler(Main2Activity.this),
+                    httpUtil = new GoogleMapUtility();
+                    httpUtil.requestPointSearch(new ResultHandler(MapAlbumActivity.this),
                             coordinates[0], coordinates[1]);
 
                     semaphoreLongTouch = true;           // 롱터치가 발생했는지를 알리는 플래그
@@ -132,7 +124,7 @@ public class Main2Activity extends FragmentActivity {
         }
     }
 
-//        Intent intent = new Intent(getApplicationContext(), GoogleMapkiUtil.class);
+//        Intent intent = new Intent(getApplicationContext(), GoogleMapUtility.class);
 //        intent.putExtra("key", getAddress);
 //        intent.putExtra("code", REQUEST_CODE_A);
 //        startActivityForResult(intent, REQUEST_CODE_A);
@@ -186,12 +178,12 @@ public class Main2Activity extends FragmentActivity {
         public void onClick(View arg0) {
 
             if (semaphoreMapReady == true) {    // Map에서 검색을 받을 준비가 되었는지?
-                final LinearLayout linear = (LinearLayout) View.inflate(Main2Activity.this, R.layout.dialog_map_namesearch, null);
+                final LinearLayout linear = (LinearLayout) View.inflate(MapAlbumActivity.this, R.layout.dialog_map_namesearch, null);
                 TextView addrTv = (TextView) linear.findViewById(R.id.dialog_map_search_addr);
                 Location lo = mMap.getMyLocation();                             // 내 위치(주소)를 화면에 표시해 줌
                 addrTv.setText(addresReformation(lo.getLatitude(), lo.getLongitude())); // 대한민국 제외한 축약된 주소로 표시
 
-                new AlertDialog.Builder(Main2Activity.this).setTitle("Please type address to go.")
+                new AlertDialog.Builder(MapAlbumActivity.this).setTitle("Please type address to go.")
                         .setView(linear).setPositiveButton("Continue", onClickNameSearch)
                                 .setNegativeButton("Abort", null).show();
             }
@@ -212,9 +204,9 @@ public class Main2Activity extends FragmentActivity {
                         return;     // if the dialog box showing, the just return.
                     }
 
-                    progressDialog = ProgressDialog.show(Main2Activity.this, "Wait", "Please wait for a moments...");
+                    progressDialog = ProgressDialog.show(MapAlbumActivity.this, "Wait", "Please wait for a moments...");
 
-                    httpUtil.requestMapSearch(new ResultHandler(Main2Activity.this),
+                    httpUtil.requestMapSearch(new ResultHandler(MapAlbumActivity.this),
                             nameEt.getText().toString(), addrTv.getText().toString());
 
                     final InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
@@ -225,15 +217,15 @@ public class Main2Activity extends FragmentActivity {
     };
 
     static class ResultHandler extends Handler {
-        private final WeakReference<Main2Activity> mActivity;
+        private final WeakReference<MapAlbumActivity> mActivity;
 
-        ResultHandler(Main2Activity activity) {
-            mActivity = new WeakReference<Main2Activity>(activity);
+        ResultHandler(MapAlbumActivity activity) {
+            mActivity = new WeakReference<MapAlbumActivity>(activity);
         }
 
         @Override
         public void handleMessage(Message msg) {
-            Main2Activity activity = mActivity.get();
+            MapAlbumActivity activity = mActivity.get();
             if(activity != null) {
                 activity.handleMessage(msg);
             }
@@ -243,18 +235,18 @@ public class Main2Activity extends FragmentActivity {
     private void handleMessage(Message msg) {
         progressDialog.dismiss();
 
-        String result = msg.getData().getString(GoogleMapkiUtil.RESULT);
+        String result = msg.getData().getString(GoogleMapUtility.RESULT);
         ArrayList<String> searchList = new ArrayList<String>();
 
-        if (result.equals(GoogleMapkiUtil.SUCCESS_RESULT)) {
+        if (result.equals(GoogleMapUtility.SUCCESS_RESULT)) {
             searchList = msg.getData().getStringArrayList("searchList");
 
-        } else if (result.equals(GoogleMapkiUtil.TIMEOUT_RESULT)) {
+        } else if (result.equals(GoogleMapUtility.TIMEOUT_RESULT)) {
             errorString = "Timeout Error.";
             errorDialog.setMessage(errorString);
             errorDialog.show();
             return;
-        } else if (result.equals(GoogleMapkiUtil.FAIL_MAP_RESULT)) {
+        } else if (result.equals(GoogleMapUtility.FAIL_MAP_RESULT)) {
             errorString = "No Map Found.";
             errorDialog.setMessage(errorString);
             errorDialog.show();
@@ -267,7 +259,7 @@ public class Main2Activity extends FragmentActivity {
         }
 
         String[] searches = searchList.toArray(new String[searchList.size()]);
-        adjustToPoints(searches);
+        adjustToPoints(searches);       // 검색한 곳에 마크를 표시함.
 
         if (semaphoreLongTouch == true) {
             String resultAddress = httpUtil.getAddress();
@@ -293,34 +285,32 @@ public class Main2Activity extends FragmentActivity {
 
         for (int i = 0; i < length; i++) {
             LatLng latlng = new LatLng(
-                    Float.valueOf(results[i * 3 + 1]),
-                    Float.valueOf(results[i * 3 + 2]));
+                    Float.valueOf(results[i * 3 + 1]),      // 위도
+                    Float.valueOf(results[i * 3 + 2]));     // 경도
             mMap.addMarker(new MarkerOptions()
-                    .position(latlng)
+                    .position(latlng)                       // 마킹할 위치
                     .title(results[i * 3])
                     .icon(BitmapDescriptorFactory.defaultMarker(i * 360 / length)));
 
-            mPoints[i] = latlng;
+            mPoints[i] = latlng;                            // 검색한 장소를 저장
         }
-
 
         for (LatLng ll : mPoints) {
 
-            // Sometimes the longitude or latitude gathering
-            // did not work so skipping the point
-            // doubt anybody would be at 0 0
+            // (위도,경도)=(0,0)는 검색하지 않는다고 가정함.
+            // (0,0)을 배제함으로써 범위를 검색할 값이 있는지 여부도 알 수 있음.
+
             if (ll.latitude != 0 && ll.longitude != 0) {
-                // Sets the minimum and maximum latitude so we can span and zoom
                 minLatitude = (minLatitude > ll.latitude) ? ll.latitude : minLatitude;
                 maxLatitude = (maxLatitude < ll.latitude) ? ll.latitude : maxLatitude;
-                // Sets the minimum and maximum latitude so we can span and zoom
                 minLongitude = (minLongitude > ll.longitude) ? ll.longitude	: minLongitude;
                 maxLongitude = (maxLongitude < ll.longitude) ? ll.longitude	: maxLongitude;
             }
         }
 
-        CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(new LatLngBounds(new LatLng(minLatitude, minLongitude), new LatLng(maxLatitude, maxLongitude)), 4);
-        mMap.animateCamera(cu);
+        CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(new LatLngBounds(new LatLng(minLatitude, minLongitude),
+                                                                               new LatLng(maxLatitude, maxLongitude)), 4);
+        mMap.animateCamera(cu);     // 카메라를 움직여서 검색한 위치를 포커스함.
     }
 
     @Override

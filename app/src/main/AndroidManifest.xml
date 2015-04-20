@@ -113,14 +113,16 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyAl0NO9ThZ7wOk_pJp-fLH39_xFUrasuA4" />
 
+
+
         <activity
-            android:name=".mapalbum.GoogleMapkiUtil"
-            android:label="@string/title_activity_google_mapki_util" >
+            android:name=".mapalbum.MapAlbumActivity"
+            android:label="@string/title_activity_mapalbum" >
         </activity>
 
         <activity
-            android:name=".mapalbum.Main2Activity"
-            android:label="@string/title_activity_mapalbum" >
+            android:name=".chat.ClientActivity"
+            android:label="@string/title_activity_client" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />

@@ -30,6 +30,7 @@
     <string name="title_activity_stop_watch">StopWatchActivity</string>
     <string name="title_activity_map">MapActivity</string>
     <string name="title_activity_mapalbum">Main2Activity</string>
+    <string name="title_activity_client">ClientActivity</string>
 
     <string name="title_section1">Section 1</string>
     <string name="title_section2">Section 2</string>
