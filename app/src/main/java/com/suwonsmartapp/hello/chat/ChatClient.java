@@ -35,7 +35,15 @@ public class ChatClient {
 		}
 	}
 
-	public void sendMessage(String message) {
+	public void disconnect() {
+		try {
+			mSocket.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+		public void sendMessage(String message) {
 		mReceiveThread.sendMessage(message);
 	}
 

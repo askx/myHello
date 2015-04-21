@@ -58,7 +58,20 @@ public class ClientActivity extends Activity implements View.OnClickListener {
             }).start();
         }
         if (flagConnect) {
-            chatClient.sendMessage(mchatting_message.getText().toString());
+
+            // /qq 또는 /exit 를 입력할 경우 통신을 종료하고 프로그램을 종료함.
+            String msg = mchatting_message.getText().toString();
+            if (("/qq".equals(msg)) || ("/exit".equals(msg))) {
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        chatClient.disconnect();
+                        finish();
+                    }
+                }).start();
+            }
+
+            chatClient.sendMessage(msg);
             mchatting_message.setText("");
         }
     }
